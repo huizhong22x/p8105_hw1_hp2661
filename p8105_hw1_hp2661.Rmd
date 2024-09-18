@@ -1,0 +1,114 @@
+---
+title: "p8105_hw1_hp2661"
+author: "Huizhong Peng"
+date: "2024-09-17"
+output: github_document
+---
+
+```{r include=FALSE}
+library(palmerpenguins)
+library(ggplot2)
+library(tidyverse)
+```
+
+# Problem 1
+
+Download the package in the console and load the dataset.
+
+```{r results='hide'}
+data("penguins", package = "palmerpenguins")
+head(penguins)
+summary(penguins)
+
+nrow(penguins)
+ncol(penguins)
+mean(penguins$flipper_length_mm, na.rm = T)
+```
+
+The penguins dataset contains 344 rows and 8 columns, including variables 
+"species", "island", "bill_length_mm", "bill_depth_mm", "flipper_length_mm", 
+"body_mass_g", "sex" and "year". 
+
+The species includes "Adelie", "Chinstrap" and "Gentoo". 
+
+The mean flipper length is 200.9 mm.
+
+Then create a scatter plot.
+
+```{r warning=FALSE}
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, colour = species)) + 
+  geom_point() +
+  labs(title = "Scatterplot of Flipper Length vs Bill Length",
+       x = "Bill Length (mm)",
+       y = "Flipper Length (mm)")
+ggsave("hw1_scatter_plot.pdf", height = 4, width = 6)
+```
+
+
+# Problem 2
+
+Create a dataframe.
+
+```{r}
+set.seed(1234)
+
+dat = tibble(
+  vec_numeric   = rnorm(10, mean = 0, sd = 1), 
+  vec_logical   = vec_numeric >0,
+  vec_character = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+  vec_factor    = factor(c("low", "moderate", "high", "low", "moderate", "high", 
+                          "low", "moderate", "high", "high"))
+)
+print(dat)
+```
+
+
+```{r, results='hide', warning=FALSE}
+dat |> pull(vec_numeric) |> mean()
+dat |> pull(vec_logical) |> mean()
+dat |> pull(vec_character) |> mean()
+dat |> pull(vec_factor) |> mean()
+```
+
+If taking the mean, the numeric vector and logical vector work. 
+The character vector and factor vector don't work, returning NA.
+
+
+Convert the logical, character, and factor variables to numeric variables.
+
+```{r, x-type, eval=FALSE}
+num_log = 
+  dat |> pull(vec_logical) |> as.numeric()
+num_cha = 
+  dat |> pull(vec_character) |> as.numeric()
+num_fac = 
+  dat |> pull(vec_factor) |> as.numeric()
+
+num_log
+num_cha
+num_fac
+```
+
+The logical variables are successfully converted to numeric variables. "TRUE" 
+becomes 1 and "FALSE" becomes 0. This explains why taking the mean of a logical 
+vector works, and the mean reflects the proportion of "TRUE" in this vector.
+
+The conversion of character variables fail and it returns NA. This is because
+characters can't be interpreted as numbers, and it explains why taking the mean 
+of a character vector fails.
+
+The factor variables are successfully converted to numeric variables because 
+each level corresponds to a number. "low" becomes 2, "moderate" becomes 3 and 
+"high" becomes 1. But it has no meaning in practice so mean() can't take the 
+mean of a factor vector.
+
+
+
+
+
+
+
+
+
+
+
