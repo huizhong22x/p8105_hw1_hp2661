@@ -5,7 +5,7 @@ date: "2024-09-17"
 output: github_document
 ---
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
 library(palmerpenguins)
 library(ggplot2)
 library(tidyverse)
@@ -15,14 +15,15 @@ library(tidyverse)
 
 Download the package in the console and load the dataset.
 
-```{r results='hide'}
+```{r}
 data("penguins", package = "palmerpenguins")
 head(penguins)
 summary(penguins)
 
 nrow(penguins)
 ncol(penguins)
-mean(penguins$flipper_length_mm, na.rm = T)
+mean_flipper_length = penguins |> pull(flipper_length_mm) |> mean(na.rm = T)
+mean_flipper_length
 ```
 
 The penguins dataset contains 344 rows and 8 columns, including variables 
@@ -63,7 +64,7 @@ print(dat)
 ```
 
 
-```{r, results='hide', warning=FALSE}
+```{r, warning=FALSE}
 dat |> pull(vec_numeric) |> mean()
 dat |> pull(vec_logical) |> mean()
 dat |> pull(vec_character) |> mean()
